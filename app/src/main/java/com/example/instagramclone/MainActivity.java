@@ -2,9 +2,12 @@ package com.example.instagramclone;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,6 +25,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         edtLoginEmail = findViewById(R.id.edtLoginEmail);
         edtLoginpassword = findViewById(R.id.edtLoginPassword);
+
+        edtLoginpassword.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN){
+                    onClick(btnUserLogin);
+                }
+                return false;
+            }
+        });
+
         btnUserLogin = findViewById(R.id.btnUserLogin);
         btnUserSignup = findViewById(R.id.btnUserSignup);
 
@@ -30,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(ParseUser.getCurrentUser() != null)
         {
-            ParseUser.logOut();
+            transitionToHome();
         }
     }
 
@@ -43,13 +57,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnUserLogin:
                 ParseUser.logInInBackground(edtLoginEmail.getText().toString(), edtLoginpassword.getText().toString(), (parseUser, e) -> {
 
+
                     if (parseUser != null) {
                         FancyToast.makeText(MainActivity.this, "Login successfully",Toast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
+                        transitionToHome();
 
                     } else {
                         ParseUser.logOut();
                         FancyToast.makeText(MainActivity.this,e.getMessage(),Toast.LENGTH_LONG,FancyToast.ERROR,true).show();
                     }
+
                 });
                 break;
             case R.id.btnUserSignup:
@@ -58,5 +75,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
 
+    }
+
+    public void rootLoginLayoutClicked(View view) {
+        try {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void transitionToHome(){
+        Intent intent = new Intent(MainActivity.this,Home.class);
+        startActivity(intent);
     }
 }

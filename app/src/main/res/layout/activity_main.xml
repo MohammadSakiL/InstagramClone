@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MainActivity"
+    android:onClick="rootLoginLayoutClicked"
     >
 
     <RelativeLayout
@@ -81,14 +82,7 @@
             android:textColor="@color/colorWhite"
 
             />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Don't have account yet?"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            />
+
 
 
 

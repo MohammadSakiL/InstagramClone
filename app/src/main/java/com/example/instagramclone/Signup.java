@@ -47,8 +47,9 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
 
         btnNewSignup.setOnClickListener(this);
         btnNewLogin.setOnClickListener(this);
+
         if(ParseUser.getCurrentUser() != null) {
-            ParseUser.getCurrentUser().logOut();
+            transitionToHome();
         }
     }
 
@@ -77,6 +78,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
                     public void done(ParseException e) {
                         if (e == null) {
                             FancyToast.makeText(Signup.this,user.getUsername() + "sign up successfully",Toast.LENGTH_LONG,FancyToast.SUCCESS,true).show();
+                            transitionToHome();
                         } else {
                             ParseUser.logOut();
                             FancyToast.makeText(Signup.this,e.getMessage(),Toast.LENGTH_LONG,FancyToast.ERROR,true).show();
@@ -92,7 +94,18 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
 
     }
     public void rootLayoutclicked(View view){
-        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+        try{
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),0);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void transitionToHome(){
+        Intent intent = new Intent(Signup.this,Home.class);
+        startActivity(intent);
     }
 }
